@@ -3,7 +3,7 @@ from random import randint
 from tkinter import messagebox
 from isvalid import is_valid_sudoku
 from generator import _gen
-
+import time
 
 class SudokuSolver:
     def __init__(self, master):
@@ -110,6 +110,9 @@ class SudokuSolver:
                     for j in range(9):
                         self.grid[i][j].delete(0, tk.END)
                         self.grid[i][j].insert(0, puzzle[i][j])
+                        # sleep for 0.05 seconds
+                        time.sleep(randint(1, 10) / 100)
+                        self.master.update()
             else:
                 messagebox.showerror("Error", "No solution exists")
         else:
