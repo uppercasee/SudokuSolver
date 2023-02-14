@@ -50,17 +50,24 @@ class SudokuSolver:
         self.menu = tk.Menu(self.master)
         self.master.config(menu=self.menu)
 
-        # Create a file menu
+        # File menu
         self.file_menu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="File", menu=self.file_menu)
         self.file_menu.add_command(label="Exit(E)", command=self.master.destroy)
 
-        # Create a puzzle menu
+        # Puzzle menu
         self.puzzle_menu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="Puzzle", menu=self.puzzle_menu)
         self.puzzle_menu.add_command(label="Solve(S)", command=self.solve)
         self.puzzle_menu.add_command(label="Generate(G)", command=lambda: self.generate("Easy"))
         self.puzzle_menu.add_command(label="Clear(C)", command=self.clear)
+
+        # Difficulty dropdown menu
+        self.difficulty_menu = tk.Menu(self.puzzle_menu, tearoff=0)
+        self.puzzle_menu.add_cascade(label="Difficulty", menu=self.difficulty_menu)
+        self.difficulty_menu.add_command(label="Easy (1)", command=lambda: self._toggle_difficulty("Easy"))
+        self.difficulty_menu.add_command(label="Medium (2)", command=lambda: self._toggle_difficulty("Medium"))
+        self.difficulty_menu.add_command(label="Hard (3)", command=lambda: self._toggle_difficulty("Hard"))
 
         # Create a help menu
         self.help_menu = tk.Menu(self.menu, tearoff=0)
@@ -117,17 +124,17 @@ class SudokuSolver:
 
     def _bindings(self):
         # type to change difficulty level
-        self.master.bind("1", lambda event: self.generate("Easy"))
-        self.master.bind("2", lambda event: self.generate("Medium"))
-        self.master.bind("3", lambda event: self.generate("Hard"))
+        self.master.bind("1", lambda event: self._toggle_difficulty("Easy"))
+        self.master.bind("2", lambda event: self._toggle_difficulty("Medium"))
+        self.master.bind("3", lambda event: self._toggle_difficulty("Hard"))
 
         # Type S to solve the puzzle
         self.master.bind("s", lambda event: self.solve())
         self.master.bind("S", lambda event: self.solve())
 
         # Type G to generate a puzzle
-        self.master.bind("g", lambda event: self.generate("Easy"))
-        self.master.bind("G", lambda event: self.generate("Easy"))
+        self.master.bind("g", lambda event: self.generate(self.difficulty))
+        self.master.bind("G", lambda event: self.generate(self.difficulty))
 
         # Type C to clear the puzzle
         self.master.bind("c", lambda event: self.clear())
@@ -187,19 +194,19 @@ class SudokuSolver:
         if difficulty == "Easy":
             for i in range(9):
                 for j in range(9):
-                    if randint(0, 1) == 1:
+                    if randint(0, 1) != 1:
                         self.grid[i][j].delete(0, tk.END)
                         self.grid[i][j].config(bg="#bbdefd")
         elif difficulty == "Medium":
             for i in range(9):
                 for j in range(9):
-                    if randint(0, 2) == 1:
+                    if randint(0, 3) != 1:
                         self.grid[i][j].delete(0, tk.END)
                         self.grid[i][j].config(bg="#bbdefd")
         elif difficulty == "Hard":
             for i in range(9):
                 for j in range(9):
-                    if randint(0, 3) == 1:
+                    if randint(0, 5) != 1:
                         self.grid[i][j].delete(0, tk.END)
                         self.grid[i][j].config(bg="#bbdefd")
 
