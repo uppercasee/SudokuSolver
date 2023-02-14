@@ -10,7 +10,12 @@ class SudokuSolver:
         self.master = master
         self.master.title("Sudoku Solver")
         self.grid = [[None for _ in range(9)] for _ in range(9)]
+        self._create_grid()
+        self._create_menu()
+        self._buttons()
+        self._bindings()
 
+    def _create_grid(self):
         # Create the grid
         self.grid = []
         for i in range(9):
@@ -18,7 +23,7 @@ class SudokuSolver:
             for j in range(9):
                 entry = tk.Entry(
                     width=3,
-                    font=("Helvetica", 25),
+                    font=("Helvetica", 30),
                     justify="center",
                     bd=1,
                     relief=tk.RIDGE,
@@ -39,15 +44,41 @@ class SudokuSolver:
                 )
             self.grid.append(row)
 
+    def _create_menu(self):
+        # Create a menu
+        self.menu = tk.Menu(self.master)
+        self.master.config(menu=self.menu)
+
+        # Create a file menu
+        self.file_menu = tk.Menu(self.menu, tearoff=0)
+        self.menu.add_cascade(label="File", menu=self.file_menu)
+        self.file_menu.add_command(label="Exit(E)", command=self.master.destroy)
+
+        # Create a puzzle menu
+        self.puzzle_menu = tk.Menu(self.menu, tearoff=0)
+        self.menu.add_cascade(label="Puzzle", menu=self.puzzle_menu)
+        self.puzzle_menu.add_command(label="Solve(S)", command=self.solve)
+        self.puzzle_menu.add_command(label="Generate(G)", command=lambda: self.generate("Easy"))
+        self.puzzle_menu.add_command(label="Clear(C)", command=self.clear)
+
+        # Create a help menu
+        self.help_menu = tk.Menu(self.menu, tearoff=0)
+        self.menu.add_cascade(label="Help", menu=self.help_menu)
+        self.help_menu.add_command(label="About", command=self._about)
+
+    def _about(self):
+        messagebox.showinfo(
+            "About",
+            "Sudoku Solver\n"
+        )
+        
+
+    def _buttons(self):
         # Create "Solve" button
         self.solve_button = tk.Button(
-            self.master, text="Solve", command=self.solve, bg="#4CAF50", fg="white", width=10
+            self.master, text="Solve", command=self.solve, bg="#4CAF50", fg="white", width=13
         )
         self.solve_button.grid(row=9, column=0, columnspan=2)
-
-        # Type S to solve the puzzle
-        self.master.bind("s", lambda event: self.solve())
-        self.master.bind("S", lambda event: self.solve())
 
         # create generate button
         self.generate_button = tk.Button(
@@ -56,17 +87,13 @@ class SudokuSolver:
             command=lambda: self.generate("Easy"),
             bg="#E91E63",
             fg="white",
-            width=10
+            width=13
         )
         self.generate_button.grid(row=9, column=2, columnspan=2)
 
-        # Type G to generate a puzzle
-        self.master.bind("g", lambda event: self.generate("Easy"))
-        self.master.bind("G", lambda event: self.generate("Easy"))
-
         # create dofficulty button with background color light green
         self.difficulty_button = tk.Menubutton(
-            self.master, text="Difficulty", relief=tk.RAISED, bg="#8BC34A", fg="white", width=10
+            self.master, text="Difficulty", relief=tk.RAISED, bg="#8BC34A", fg="white", width=15
         )
         self.difficulty_button.grid(row=9, column=5, columnspan=2)
         self.difficulty_menu = tk.Menu(self.difficulty_button, tearoff=0)
@@ -83,9 +110,23 @@ class SudokuSolver:
 
         # create clear button with background color RED
         self.clear_button = tk.Button(
-            self.master, text="Clear", command=self.clear, bg="#F44336", fg="white", width=10
+            self.master, text="Clear", command=self.clear, bg="#F44336", fg="white", width=12
         )
         self.clear_button.grid(row=9, column=7, columnspan=2)
+
+    def _bindings(self):
+        # type to change difficulty level
+        self.master.bind("1", lambda event: self.generate("Easy"))
+        self.master.bind("2", lambda event: self.generate("Medium"))
+        self.master.bind("3", lambda event: self.generate("Hard"))
+
+        # Type S to solve the puzzle
+        self.master.bind("s", lambda event: self.solve())
+        self.master.bind("S", lambda event: self.solve())
+
+        # Type G to generate a puzzle
+        self.master.bind("g", lambda event: self.generate("Easy"))
+        self.master.bind("G", lambda event: self.generate("Easy"))
 
         # Type C to clear the puzzle
         self.master.bind("c", lambda event: self.clear())
