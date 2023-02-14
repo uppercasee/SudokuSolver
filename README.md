@@ -2,7 +2,7 @@
 
 This is a graphical user interface (GUI) for solving Sudoku puzzles. It allows the user to input a puzzle, solve it, generate a new puzzle, or clear the current one. The difficulty level can also be set to "Easy", "Medium", or "Hard". The program uses tkinter for creating the GUI, and the PIL library for taking screenshots.
 
-![Sudoku gif](./assets/sudoku-3.gif)
+![Sudoku gif](./assets/Sudoku-3.gif)
 
 
 ## Requirements
