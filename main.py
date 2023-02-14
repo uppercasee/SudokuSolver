@@ -1,7 +1,7 @@
 import tkinter as tk
 from random import randint
 from tkinter import messagebox
-from isvalid import is_valid_sudoku
+from isvalid import is_num_valid, is_valid_sudoku
 from generator import _gen
 import time
 
@@ -10,6 +10,7 @@ class SudokuSolver:
         self.master = master
         self.master.title("Sudoku Solver")
         self.grid = [[None for _ in range(9)] for _ in range(9)]
+        self.difficulty = "Easy"
         self._create_grid()
         self._create_menu()
         self._buttons()
@@ -72,7 +73,6 @@ class SudokuSolver:
             "Sudoku Solver\n"
         )
         
-
     def _buttons(self):
         # Create "Solve" button
         self.solve_button = tk.Button(
@@ -84,7 +84,7 @@ class SudokuSolver:
         self.generate_button = tk.Button(
             self.master,
             text="Generate",
-            command=lambda: self.generate("Easy"),
+            command=lambda: self.generate(self.difficulty),
             bg="#E91E63",
             fg="white",
             width=13
@@ -97,14 +97,15 @@ class SudokuSolver:
         )
         self.difficulty_button.grid(row=9, column=5, columnspan=2)
         self.difficulty_menu = tk.Menu(self.difficulty_button, tearoff=0)
+        # Add a command for easy difficulty that generates a puzzle and sets the difficulty to easy
         self.difficulty_menu.add_command(
-            label="Easy", command=lambda: self.generate("Easy")
+            label="Easy", command=lambda: self._toggle_difficulty("Easy")
         )
         self.difficulty_menu.add_command(
-            label="Medium", command=lambda: self.generate("Medium")
+            label="Medium", command=lambda: self._toggle_difficulty("Medium")
         )
         self.difficulty_menu.add_command(
-            label="Hard", command=lambda: self.generate("Hard")
+            label="Hard", command=lambda: self._toggle_difficulty("Hard")
         )
         self.difficulty_button["menu"] = self.difficulty_menu
 
@@ -136,6 +137,10 @@ class SudokuSolver:
         self.master.bind("e", lambda event: self.master.destroy())
         self.master.bind("E", lambda event: self.master.destroy())
 
+    def _toggle_difficulty(self, difficulty):
+        self.difficulty = difficulty
+        self.difficulty_button.config(text="Difficulty: " + difficulty)
+
     def solve(self):
         puzzle = [[0 for _ in range(9)] for _ in range(9)]
         for i in range(9):
@@ -164,8 +169,7 @@ class SudokuSolver:
             for j in range(9):
                 if puzzle[i][j] == 0:
                     for num in range(1, 10):
-                        if is_valid_sudoku(puzzle):
-                            # if self.is_valid(puzzle, i, j, num):
+                        if is_num_valid(puzzle, i, j, num):
                             puzzle[i][j] = num
                             if self.backtrack(puzzle):
                                 return True
