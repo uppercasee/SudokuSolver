@@ -196,7 +196,7 @@ class SudokuSolver:
     def _buttons(self):
         # Create "Solve" button
         self.solve_button = tk.Button(
-            self.master, text="Solve", command=self.solve, bg="#4CAF50", fg="white", width=13
+            self.master, text="Solve", command=self.solve, bg="green", fg="white", width=13
         )
         self.solve_button.grid(row=9, column=0, columnspan=2)
 
@@ -205,7 +205,7 @@ class SudokuSolver:
             self.master,
             text="Generate",
             command=lambda: self.generate(self.difficulty),
-            bg="#E91E63",
+            bg="purple",
             fg="white",
             width=13
         )
@@ -213,7 +213,7 @@ class SudokuSolver:
 
         # create dofficulty button with background color light green
         self.difficulty_button = tk.Menubutton(
-            self.master, text="Difficulty", relief=tk.RAISED, bg="#8BC34A", fg="white", width=15
+            self.master, text="Difficulty", relief=tk.RAISED, bg="yellow", fg="black", width=15
         )
         self.difficulty_button.grid(row=9, column=5, columnspan=2)
         self.difficulty_menu = tk.Menu(self.difficulty_button, tearoff=0)
