@@ -107,6 +107,26 @@ def is_valid_unit( unit):
     unit = [i for i in unit if i != 0]
     return len(unit) == len(set(unit))
 
+def is_num_valid(puzzle, i, j, num):
+    # Check the row
+    for k in range(9):
+        if puzzle[i][k] == num:
+            return False
+
+    # Check the column
+    for k in range(9):
+        if puzzle[k][j] == num:
+            return False
+
+    # Check the 3x3 subgrid
+    row_start = i // 3 * 3
+    col_start = j // 3 * 3
+    for k in range(3):
+        for l in range(3):
+            if puzzle[row_start + k][col_start + l] == num:
+                return False
+    return True
+
 if __name__ == "__main__":
     board = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
