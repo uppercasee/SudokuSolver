@@ -4,6 +4,7 @@ from random import randint
 from isvalid import is_num_valid, is_valid_sudoku
 from generator import _gen
 import time
+from PIL import ImageGrab
 
 
 class SudokuSolver:
@@ -153,6 +154,7 @@ class SudokuSolver:
             label="Medium (2)", command=lambda: self._toggle_difficulty("Medium"))
         self.difficulty_menu.add_command(
             label="Hard (3)", command=lambda: self._toggle_difficulty("Hard"))
+        self.file_menu.add_command(label="Save(S)", command=self.save)
         self.file_menu.add_command(
             label="Exit(E)", command=self.master.destroy)
 
@@ -249,6 +251,12 @@ class SudokuSolver:
         self.master.bind("S", lambda event: self.solve()
                          if self.buttons_can_be_clicked else None)
 
+        # Type CTRL + S to save the puzzle
+        self.master.bind("<Control-s>", lambda event: self.save()
+                            if self.buttons_can_be_clicked else None)
+        self.master.bind("<Control-S>", lambda event: self.save()
+                            if self.buttons_can_be_clicked else None)
+
         # Type G to generate a puzzle
         self.master.bind("g", lambda event: self.generate(
             self.difficulty) if self.buttons_can_be_clicked else None)
@@ -336,6 +344,19 @@ class SudokuSolver:
                     if randint(0, 5) != 1:
                         self.grid[i][j].delete(0, tk.END)
                         self.grid[i][j].config(bg=self.generated_color)
+
+    def save(self):
+        # save the current puzzle as a png file in the current directory
+        # get the coordinates of the puzzle grid
+        x = self.grid[0][0].winfo_rootx()
+        y = self.grid[0][0].winfo_rooty()
+        x1 = self.grid[8][8].winfo_rootx() + 50
+        y1 = self.grid[8][8].winfo_rooty() + 50
+        # wait for 0.5 seconds
+        time.sleep(0.5)
+        # save the image as ./assets/sudoku-[current time].png
+        ImageGrab.grab().crop((x, y, x1, y1)).save(
+            "./assets/sudoku-" + str(time.time()) + ".png")
 
     def clear(self):
         for i in range(9):
