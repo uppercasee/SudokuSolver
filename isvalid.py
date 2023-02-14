@@ -139,27 +139,3 @@ if __name__ == "__main__":
         print("Valid")
     else:
         print("Not Valid")
-
-
-
-
-        
-    # def is_valid(self, puzzle, row, col, num):
-    #     # Check the row
-    #     for i in range(9):
-    #         if puzzle[row][i] == num:
-    #             return False
-
-    #     # Check the column
-    #     for i in range(9):
-    #         if puzzle[i][col] == num:
-    #             return False
-
-    #     # Check the 3x3 subgrid
-    #     row_start = row // 3 * 3
-    #     col_start = col // 3 * 3
-    #     for i in range(3):
-    #         for j in range(3):
-    #             if puzzle[row_start + i][col_start + j] == num:
-    #                 return False
-    #     return True

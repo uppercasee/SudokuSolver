@@ -1,6 +1,6 @@
 import tkinter as tk
-from random import randint
 from tkinter import messagebox
+from random import randint
 from isvalid import is_num_valid, is_valid_sudoku
 from generator import _gen
 import time
@@ -10,11 +10,12 @@ class SudokuSolver:
     def __init__(self, master):
         self.master = master
         self.master.title("Sudoku Solver")
+        self.master.resizable(False, False)
         self.grid = [[None for _ in range(9)] for _ in range(9)]
         self.difficulty = "Easy"
         self.grid_clicked_color = "#bbdefd"
-        self.grid_affected_color = "#e2ebf3"
-        self.grid_unaffected_color = "#ffffff"
+        self.grid_affected_color = "#ffffff"
+        self.grid_unaffected_color = "#e2ebf3"
         self.generated_color = "#e2ebf3"
         self.grid_clicked = None
         self.buttons_can_be_clicked = True
@@ -38,7 +39,7 @@ class SudokuSolver:
                 )
                 entry.grid(row=i, column=j, padx=1, pady=1)
                 row.append(entry)
-                entry.config(bg=self.grid_affected_color)
+                entry.config(bg=self.grid_unaffected_color)
                 entry.config(fg="#000000")
                 # entry.bind(
                 #     "<KeyRelease>", lambda event: event.widget.config(
