@@ -11,6 +11,11 @@ class SudokuSolver:
         self.master.title("Sudoku Solver")
         self.grid = [[None for _ in range(9)] for _ in range(9)]
         self.difficulty = "Easy"
+        self.grid_clicked_color = "#bbdefd"
+        self.grid_affected_color = "#e2ebf3"
+        self.grid_unaffected_color = "#ffffff"
+        self.grid_clicked = None
+
         self._create_grid()
         self._create_menu()
         self._buttons()
@@ -31,20 +36,77 @@ class SudokuSolver:
                 )
                 entry.grid(row=i, column=j, padx=1, pady=1)
                 row.append(entry)
-                entry.config(bg="#bbdefd")
+                entry.config(bg=self.grid_unaffected_color)
                 entry.config(fg="#000000")
-                entry.bind(
-                    "<KeyRelease>", lambda event: event.widget.config(
-                        bg="white")
-                )
-                entry.bind(
-                    "<FocusOut>",
-                    lambda event: event.widget.config(bg="#bbdefd")
-                    if event.widget.get() == ""
-                    else event.widget.config(bg="white"),
-                )
+                # entry.bind(
+                #     "<KeyRelease>", lambda event: event.widget.config(
+                #         bg="white")
+                # )
+                # entry.bind(
+                #     "<FocusOut>",
+                #     lambda event: event.widget.config(bg=self.grid_unaffected_color)
+                #     if event.widget.get() == ""
+                #     else event.widget.config(bg="white"),
+                # )
+                entry.bind("<Button-1>", self._grid_clicked)
             self.grid.append(row)
 
+    def _grid_clicked(self, event):
+        # Highlight the clicked cell, row, and column and the 3x3 subgrid
+        # Get the row and column of the clicked cell
+        row = event.widget.grid_info()["row"]
+        col = event.widget.grid_info()["column"]
+        self.grid_clicked = event.widget
+        self._unhighlight(row, col)
+
+        # Highlight the row and column
+        for i in range(9):
+            self.grid[row][i].config(bg=self.grid_affected_color)
+            self.grid[i][col].config(bg=self.grid_affected_color)
+        
+        # Highlight the 3x3 subgrid
+        for i in range(3):
+            for j in range(3):
+                self.grid[(row // 3) * 3 + i][(col // 3) * 3 + j].config(bg=self.grid_affected_color)
+
+        # unhighlight after focus is lost
+        event.widget.bind(
+            "<FocusOut>",
+            lambda event: self._unhighlight(row, col)
+            if event.widget.get() == ""
+            else event.widget.config(bg=self.grid_unaffected_color),
+        )
+
+        # Highlight the clicked cell after its focused
+        event.widget.config(bg=self.grid_clicked_color)
+
+        # unhighlight everything after losing focus
+        event.widget.bind(
+            "<FocusOut>",
+            lambda event: self._unhighlight(row, col)
+            if event.widget.get() == ""
+            else event.widget.config(bg=self.grid_unaffected_color),
+        )
+
+    def _unhighlight(self, row, col):
+        # unhighlight the entire grid
+        for i in range(9):
+            for j in range(9):
+                self.grid[i][j].config(bg=self.grid_unaffected_color)
+        # unhighlight the clicked cell
+        self.grid_clicked.config(bg=self.grid_unaffected_color)
+
+        # unhiglight the row and column
+        for i in range(9):
+            self.grid[row][i].config(bg=self.grid_unaffected_color)
+            self.grid[i][col].config(bg=self.grid_unaffected_color)
+
+        # unhighlight the 3x3 subgrid
+        for i in range(3):
+            for j in range(3):
+                self.grid[(row // 3) * 3 + i][(col // 3) * 3 + j].config(bg=self.grid_unaffected_color)
+
+            
     def _create_menu(self):
         # Create a menu
         self.menu = tk.Menu(self.master)
@@ -123,6 +185,9 @@ class SudokuSolver:
         self.clear_button.grid(row=9, column=7, columnspan=2)
 
     def _bindings(self):
+        # Type ESC to unfocus the currently focused cell
+        self.master.bind("<Escape>", lambda event: self.master.focus())
+
         # type to change difficulty level
         self.master.bind("1", lambda event: self._toggle_difficulty("Easy"))
         self.master.bind("2", lambda event: self._toggle_difficulty("Medium"))
@@ -196,19 +261,19 @@ class SudokuSolver:
                 for j in range(9):
                     if randint(0, 1) != 1:
                         self.grid[i][j].delete(0, tk.END)
-                        self.grid[i][j].config(bg="#bbdefd")
+                        self.grid[i][j].config(bg=self.grid_unaffected_color)
         elif difficulty == "Medium":
             for i in range(9):
                 for j in range(9):
                     if randint(0, 3) != 1:
                         self.grid[i][j].delete(0, tk.END)
-                        self.grid[i][j].config(bg="#bbdefd")
+                        self.grid[i][j].config(bg=self.grid_unaffected_color)
         elif difficulty == "Hard":
             for i in range(9):
                 for j in range(9):
                     if randint(0, 5) != 1:
                         self.grid[i][j].delete(0, tk.END)
-                        self.grid[i][j].config(bg="#bbdefd")
+                        self.grid[i][j].config(bg=self.grid_unaffected_color)
 
     def clear(self):
         for i in range(9):
