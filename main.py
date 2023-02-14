@@ -14,8 +14,9 @@ class SudokuSolver:
         self.grid_clicked_color = "#bbdefd"
         self.grid_affected_color = "#e2ebf3"
         self.grid_unaffected_color = "#ffffff"
+        self.generated_color = "#e2ebf3"
         self.grid_clicked = None
-
+        self.buttons_can_be_clicked = True
         self._create_grid()
         self._create_menu()
         self._buttons()
@@ -36,7 +37,7 @@ class SudokuSolver:
                 )
                 entry.grid(row=i, column=j, padx=1, pady=1)
                 row.append(entry)
-                entry.config(bg=self.grid_unaffected_color)
+                entry.config(bg=self.grid_affected_color)
                 entry.config(fg="#000000")
                 # entry.bind(
                 #     "<KeyRelease>", lambda event: event.widget.config(
@@ -106,7 +107,40 @@ class SudokuSolver:
             for j in range(3):
                 self.grid[(row // 3) * 3 + i][(col // 3) * 3 + j].config(bg=self.grid_unaffected_color)
 
-            
+    def _clickable_buttons(self):
+        self.buttons_can_be_clicked = True
+        # Make the buttons clickable
+        self.solve_button.config(state=tk.NORMAL)
+        self.generate_button.config(state=tk.NORMAL)
+        self.clear_button.config(state=tk.NORMAL)
+
+    def _unclickable_buttons(self):
+        self.buttons_can_be_clicked = False
+        # Make the buttons unclickable
+        self.solve_button.config(state=tk.DISABLED)
+        self.generate_button.config(state=tk.DISABLED)
+        self.clear_button.config(state=tk.DISABLED)        
+
+    def _menu_unclickable(self):
+        self.file_menu.entryconfig("Exit(E)", state=tk.DISABLED)
+        self.puzzle_menu.entryconfig("Solve(S)", state=tk.DISABLED)
+        self.puzzle_menu.entryconfig("Generate(G)", state=tk.DISABLED)
+        self.puzzle_menu.entryconfig("Clear(C)", state=tk.DISABLED)
+
+    def _menu_clickable(self):
+        self.file_menu.entryconfig("Exit(E)", state=tk.NORMAL)
+        self.puzzle_menu.entryconfig("Solve(S)", state=tk.NORMAL)
+        self.puzzle_menu.entryconfig("Generate(G)", state=tk.NORMAL)
+        self.puzzle_menu.entryconfig("Clear(C)", state=tk.NORMAL)
+
+    def _toggle_buttons(self):
+        if self.buttons_can_be_clicked:
+            self._unclickable_buttons()
+            self._menu_unclickable()
+        else:
+            self._clickable_buttons()
+            self._menu_clickable()
+
     def _create_menu(self):
         # Create a menu
         self.menu = tk.Menu(self.master)
@@ -115,6 +149,12 @@ class SudokuSolver:
         # File menu
         self.file_menu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="File", menu=self.file_menu)
+        # Difficulty dropdown menu
+        self.difficulty_menu = tk.Menu(self.file_menu, tearoff=0)
+        self.file_menu.add_cascade(label="Difficulty", menu=self.difficulty_menu)
+        self.difficulty_menu.add_command(label="Easy (1)", command=lambda: self._toggle_difficulty("Easy"))
+        self.difficulty_menu.add_command(label="Medium (2)", command=lambda: self._toggle_difficulty("Medium"))
+        self.difficulty_menu.add_command(label="Hard (3)", command=lambda: self._toggle_difficulty("Hard"))
         self.file_menu.add_command(label="Exit(E)", command=self.master.destroy)
 
         # Puzzle menu
@@ -123,13 +163,6 @@ class SudokuSolver:
         self.puzzle_menu.add_command(label="Solve(S)", command=self.solve)
         self.puzzle_menu.add_command(label="Generate(G)", command=lambda: self.generate("Easy"))
         self.puzzle_menu.add_command(label="Clear(C)", command=self.clear)
-
-        # Difficulty dropdown menu
-        self.difficulty_menu = tk.Menu(self.puzzle_menu, tearoff=0)
-        self.puzzle_menu.add_cascade(label="Difficulty", menu=self.difficulty_menu)
-        self.difficulty_menu.add_command(label="Easy (1)", command=lambda: self._toggle_difficulty("Easy"))
-        self.difficulty_menu.add_command(label="Medium (2)", command=lambda: self._toggle_difficulty("Medium"))
-        self.difficulty_menu.add_command(label="Hard (3)", command=lambda: self._toggle_difficulty("Hard"))
 
         # Create a help menu
         self.help_menu = tk.Menu(self.menu, tearoff=0)
@@ -186,24 +219,24 @@ class SudokuSolver:
 
     def _bindings(self):
         # Type ESC to unfocus the currently focused cell
-        self.master.bind("<Escape>", lambda event: self.master.focus())
+        self.master.bind("<Escape>", lambda event: self.master.focus() if self.buttons_can_be_clicked else None)
 
         # type to change difficulty level
-        self.master.bind("1", lambda event: self._toggle_difficulty("Easy"))
-        self.master.bind("2", lambda event: self._toggle_difficulty("Medium"))
-        self.master.bind("3", lambda event: self._toggle_difficulty("Hard"))
+        self.master.bind("1", lambda event: self._toggle_difficulty("Easy") if self.buttons_can_be_clicked else None)
+        self.master.bind("2", lambda event: self._toggle_difficulty("Medium") if self.buttons_can_be_clicked else None)
+        self.master.bind("3", lambda event: self._toggle_difficulty("Hard") if self.buttons_can_be_clicked else None)
 
         # Type S to solve the puzzle
-        self.master.bind("s", lambda event: self.solve())
-        self.master.bind("S", lambda event: self.solve())
+        self.master.bind("s", lambda event: self.solve() if self.buttons_can_be_clicked else None)
+        self.master.bind("S", lambda event: self.solve() if self.buttons_can_be_clicked else None)
 
         # Type G to generate a puzzle
-        self.master.bind("g", lambda event: self.generate(self.difficulty))
-        self.master.bind("G", lambda event: self.generate(self.difficulty))
+        self.master.bind("g", lambda event: self.generate(self.difficulty) if self.buttons_can_be_clicked else None)
+        self.master.bind("G", lambda event: self.generate(self.difficulty) if self.buttons_can_be_clicked else None)
 
         # Type C to clear the puzzle
-        self.master.bind("c", lambda event: self.clear())
-        self.master.bind("C", lambda event: self.clear())
+        self.master.bind("c", lambda event: self.clear() if self.buttons_can_be_clicked else None)
+        self.master.bind("C", lambda event: self.clear() if self.buttons_can_be_clicked else None)
 
         # Type E to exit the program
         self.master.bind("e", lambda event: self.master.destroy())
@@ -214,6 +247,9 @@ class SudokuSolver:
         self.difficulty_button.config(text="Difficulty: " + difficulty)
 
     def solve(self):
+        # make the other buttons unclickable
+        self._toggle_buttons()
+
         puzzle = [[0 for _ in range(9)] for _ in range(9)]
         for i in range(9):
             for j in range(9):
@@ -235,6 +271,9 @@ class SudokuSolver:
                 messagebox.showerror("Error", "No solution exists")
         else:
             messagebox.showerror("Error", "Invalid Sudoku")
+
+        # make the other buttons clickable
+        self._toggle_buttons()
 
     def backtrack(self, puzzle):
         for i in range(9):
@@ -261,19 +300,19 @@ class SudokuSolver:
                 for j in range(9):
                     if randint(0, 1) != 1:
                         self.grid[i][j].delete(0, tk.END)
-                        self.grid[i][j].config(bg=self.grid_unaffected_color)
+                        self.grid[i][j].config(bg=self.generated_color)
         elif difficulty == "Medium":
             for i in range(9):
                 for j in range(9):
                     if randint(0, 3) != 1:
                         self.grid[i][j].delete(0, tk.END)
-                        self.grid[i][j].config(bg=self.grid_unaffected_color)
+                        self.grid[i][j].config(bg=self.generated_color)
         elif difficulty == "Hard":
             for i in range(9):
                 for j in range(9):
                     if randint(0, 5) != 1:
                         self.grid[i][j].delete(0, tk.END)
-                        self.grid[i][j].config(bg=self.grid_unaffected_color)
+                        self.grid[i][j].config(bg=self.generated_color)
 
     def clear(self):
         for i in range(9):
