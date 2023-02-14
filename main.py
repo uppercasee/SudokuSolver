@@ -5,6 +5,7 @@ from isvalid import is_num_valid, is_valid_sudoku
 from generator import _gen
 import time
 
+
 class SudokuSolver:
     def __init__(self, master):
         self.master = master
@@ -64,11 +65,12 @@ class SudokuSolver:
         for i in range(9):
             self.grid[row][i].config(bg=self.grid_affected_color)
             self.grid[i][col].config(bg=self.grid_affected_color)
-        
+
         # Highlight the 3x3 subgrid
         for i in range(3):
             for j in range(3):
-                self.grid[(row // 3) * 3 + i][(col // 3) * 3 + j].config(bg=self.grid_affected_color)
+                self.grid[(row // 3) * 3 + i][(col // 3) * 3 +
+                                              j].config(bg=self.grid_affected_color)
 
         # unhighlight after focus is lost
         event.widget.bind(
@@ -105,7 +107,8 @@ class SudokuSolver:
         # unhighlight the 3x3 subgrid
         for i in range(3):
             for j in range(3):
-                self.grid[(row // 3) * 3 + i][(col // 3) * 3 + j].config(bg=self.grid_unaffected_color)
+                self.grid[(row // 3) * 3 + i][(col // 3) * 3 +
+                                              j].config(bg=self.grid_unaffected_color)
 
     def _clickable_buttons(self):
         self.buttons_can_be_clicked = True
@@ -119,7 +122,7 @@ class SudokuSolver:
         # Make the buttons unclickable
         self.solve_button.config(state=tk.DISABLED)
         self.generate_button.config(state=tk.DISABLED)
-        self.clear_button.config(state=tk.DISABLED)        
+        self.clear_button.config(state=tk.DISABLED)
 
     def _menu_unclickable(self):
         self.file_menu.entryconfig("Exit(E)", state=tk.DISABLED)
@@ -151,17 +154,23 @@ class SudokuSolver:
         self.menu.add_cascade(label="File", menu=self.file_menu)
         # Difficulty dropdown menu
         self.difficulty_menu = tk.Menu(self.file_menu, tearoff=0)
-        self.file_menu.add_cascade(label="Difficulty", menu=self.difficulty_menu)
-        self.difficulty_menu.add_command(label="Easy (1)", command=lambda: self._toggle_difficulty("Easy"))
-        self.difficulty_menu.add_command(label="Medium (2)", command=lambda: self._toggle_difficulty("Medium"))
-        self.difficulty_menu.add_command(label="Hard (3)", command=lambda: self._toggle_difficulty("Hard"))
-        self.file_menu.add_command(label="Exit(E)", command=self.master.destroy)
+        self.file_menu.add_cascade(
+            label="Difficulty", menu=self.difficulty_menu)
+        self.difficulty_menu.add_command(
+            label="Easy (1)", command=lambda: self._toggle_difficulty("Easy"))
+        self.difficulty_menu.add_command(
+            label="Medium (2)", command=lambda: self._toggle_difficulty("Medium"))
+        self.difficulty_menu.add_command(
+            label="Hard (3)", command=lambda: self._toggle_difficulty("Hard"))
+        self.file_menu.add_command(
+            label="Exit(E)", command=self.master.destroy)
 
         # Puzzle menu
         self.puzzle_menu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="Puzzle", menu=self.puzzle_menu)
         self.puzzle_menu.add_command(label="Solve(S)", command=self.solve)
-        self.puzzle_menu.add_command(label="Generate(G)", command=lambda: self.generate("Easy"))
+        self.puzzle_menu.add_command(
+            label="Generate(G)", command=lambda: self.generate("Easy"))
         self.puzzle_menu.add_command(label="Clear(C)", command=self.clear)
 
         # Create a help menu
@@ -174,7 +183,7 @@ class SudokuSolver:
             "About",
             "Sudoku Solver\n"
         )
-        
+
     def _buttons(self):
         # Create "Solve" button
         self.solve_button = tk.Button(
@@ -219,24 +228,34 @@ class SudokuSolver:
 
     def _bindings(self):
         # Type ESC to unfocus the currently focused cell
-        self.master.bind("<Escape>", lambda event: self.master.focus() if self.buttons_can_be_clicked else None)
+        self.master.bind("<Escape>", lambda event: self.master.focus()
+                         if self.buttons_can_be_clicked else None)
 
         # type to change difficulty level
-        self.master.bind("1", lambda event: self._toggle_difficulty("Easy") if self.buttons_can_be_clicked else None)
-        self.master.bind("2", lambda event: self._toggle_difficulty("Medium") if self.buttons_can_be_clicked else None)
-        self.master.bind("3", lambda event: self._toggle_difficulty("Hard") if self.buttons_can_be_clicked else None)
+        self.master.bind("1", lambda event: self._toggle_difficulty(
+            "Easy") if self.buttons_can_be_clicked else None)
+        self.master.bind("2", lambda event: self._toggle_difficulty(
+            "Medium") if self.buttons_can_be_clicked else None)
+        self.master.bind("3", lambda event: self._toggle_difficulty(
+            "Hard") if self.buttons_can_be_clicked else None)
 
         # Type S to solve the puzzle
-        self.master.bind("s", lambda event: self.solve() if self.buttons_can_be_clicked else None)
-        self.master.bind("S", lambda event: self.solve() if self.buttons_can_be_clicked else None)
+        self.master.bind("s", lambda event: self.solve()
+                         if self.buttons_can_be_clicked else None)
+        self.master.bind("S", lambda event: self.solve()
+                         if self.buttons_can_be_clicked else None)
 
         # Type G to generate a puzzle
-        self.master.bind("g", lambda event: self.generate(self.difficulty) if self.buttons_can_be_clicked else None)
-        self.master.bind("G", lambda event: self.generate(self.difficulty) if self.buttons_can_be_clicked else None)
+        self.master.bind("g", lambda event: self.generate(
+            self.difficulty) if self.buttons_can_be_clicked else None)
+        self.master.bind("G", lambda event: self.generate(
+            self.difficulty) if self.buttons_can_be_clicked else None)
 
         # Type C to clear the puzzle
-        self.master.bind("c", lambda event: self.clear() if self.buttons_can_be_clicked else None)
-        self.master.bind("C", lambda event: self.clear() if self.buttons_can_be_clicked else None)
+        self.master.bind("c", lambda event: self.clear()
+                         if self.buttons_can_be_clicked else None)
+        self.master.bind("C", lambda event: self.clear()
+                         if self.buttons_can_be_clicked else None)
 
         # Type E to exit the program
         self.master.bind("e", lambda event: self.master.destroy())
