@@ -14,10 +14,14 @@ class SudokuSolver:
         self.master.resizable(False, False)
         self.grid = [[None for _ in range(9)] for _ in range(9)]
         self.difficulty = "Easy"
+        self.generated_list = []
+        self.default_color = "#bbdefb"
         self.grid_clicked_color = "#bbdefd"
         self.grid_affected_color = "#ffffff"
         self.grid_unaffected_color = "#e2ebf3"
         self.generated_color = "#e2ebf3"
+        self.fg_white = "white"
+        self.fg_black = "black"
         self.grid_clicked = None
         self.buttons_can_be_clicked = True
         self._create_grid()
@@ -40,8 +44,8 @@ class SudokuSolver:
                 )
                 entry.grid(row=i, column=j, padx=1, pady=1)
                 row.append(entry)
-                entry.config(bg=self.grid_unaffected_color)
-                entry.config(fg="#000000")
+                entry.config(bg=self.default_color)
+                entry.config(fg=self.fg_black)
                 entry.bind("<Button-1>", self._grid_clicked)
             self.grid.append(row)
 
@@ -180,8 +184,7 @@ class SudokuSolver:
             "   - Uses backtracking algorithm\n"
             "   - Can generate puzzles\n"
             "   - Can solve puzzles\n"
-            "   - Can clear the grid\n"
-            "   - Can change difficulty\n"
+            "   - Can change difficulty levels\n"
             "   - Can save the puzzle\n"
             "Created by: \n"
             "    - lorem ipsum\n"
@@ -332,18 +335,21 @@ class SudokuSolver:
                     if randint(0, 1) != 1:
                         self.grid[i][j].delete(0, tk.END)
                         self.grid[i][j].config(bg=self.generated_color)
+                        self.generated_list.append((i, j))
         elif difficulty == "Medium":
             for i in range(9):
                 for j in range(9):
                     if randint(0, 3) != 1:
                         self.grid[i][j].delete(0, tk.END)
                         self.grid[i][j].config(bg=self.generated_color)
+                        self.generated_list.append((i, j))
         elif difficulty == "Hard":
             for i in range(9):
                 for j in range(9):
                     if randint(0, 5) != 1:
                         self.grid[i][j].delete(0, tk.END)
                         self.grid[i][j].config(bg=self.generated_color)
+                        self.generated_list.append((i, j))
 
     def save(self):
         # save the current puzzle as a png file in the current directory
@@ -362,7 +368,7 @@ class SudokuSolver:
         for i in range(9):
             for j in range(9):
                 self.grid[i][j].delete(0, tk.END)
-                self.grid[i][j].config(bg="#bbdefb")
+                self.grid[i][j].config(bg=self.default_color)
 
 
 if __name__ == "__main__":
