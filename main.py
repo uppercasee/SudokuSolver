@@ -41,16 +41,6 @@ class SudokuSolver:
                 row.append(entry)
                 entry.config(bg=self.grid_unaffected_color)
                 entry.config(fg="#000000")
-                # entry.bind(
-                #     "<KeyRelease>", lambda event: event.widget.config(
-                #         bg="white")
-                # )
-                # entry.bind(
-                #     "<FocusOut>",
-                #     lambda event: event.widget.config(bg=self.grid_unaffected_color)
-                #     if event.widget.get() == ""
-                #     else event.widget.config(bg="white"),
-                # )
                 entry.bind("<Button-1>", self._grid_clicked)
             self.grid.append(row)
 
@@ -183,6 +173,19 @@ class SudokuSolver:
         messagebox.showinfo(
             "About",
             "Sudoku Solver\n"
+            "Version 1.0\n"
+            "   - GUI version\n"
+            "   - Uses backtracking algorithm\n"
+            "   - Can generate puzzles\n"
+            "   - Can solve puzzles\n"
+            "   - Can clear the grid\n"
+            "   - Can change difficulty\n"
+            "   - Can save the puzzle\n"
+            "Created by: \n"
+            "    - lorem ipsum\n"
+            "    - lorem ipsum\n"
+            "    - lorem ipsum\n"
+            "    - lorem ipsum\n"
         )
 
     def _buttons(self):
