@@ -1,4 +1,4 @@
-# Sudoku Solver with Tkinter GUI
+# Sudoku Solver with Tkinter GUI and Backtracking Algorithm
 
 This is a graphical user interface (GUI) for solving Sudoku puzzles. It allows the user to input a puzzle, solve it, generate a new puzzle, or clear the current one. The difficulty level can also be set to "Easy", "Medium", or "Hard". The program uses tkinter for creating the GUI, and the PIL library for taking screenshots.
 
@@ -26,7 +26,7 @@ python3 ./main.py
 Click on a cell in the grid to select it, and enter a number between 1 and 9. Once a cell is selected, the program will highlight the row, column, and 3x3 subgrid that the cell belongs to. If the number entered is invalid (i.e. it violates the Sudoku rules), an error message will be displayed. The program will also prevent the user from clicking the solve, generate, or clear buttons until a valid puzzle is entered.
 
 ## Solving a puzzle
-Once a valid puzzle is entered, click the "Solve" button to solve it. The program will use a backtracking algorithm to fill in the empty cells in the grid. If the puzzle has no solution, an error message will be displayed.
+Once a valid puzzle is entered, click the "Solve" button to solve it. The program will use a **backtracking algorithm** to fill in the empty cells in the grid. If the puzzle has no solution, an error message will be displayed.
 
 ## Generating a new puzzle
 To generate a new puzzle, click the "Generate" button. The program will randomly generate a new Sudoku puzzle with the specified difficulty level (default is "Easy"). The generated puzzle will be displayed in the grid, and the user can then solve it.
