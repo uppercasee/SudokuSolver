@@ -35,7 +35,7 @@ To generate a new puzzle, click the "Generate" button. The program will randomly
 To clear the current puzzle, click the "Clear" button. This will clear all the cells in the grid.
 
 ## Taking a screenshot
-To take a screenshot of the current puzzle, click the "Screenshot" button. The program will take a screenshot of the GUI window, and save the image inside assets folder as  `sudoku-[current time].png`
+To take a screenshot of the current puzzle, press CTRL+S or go through the file menu. The program will take a screenshot of the GUI window, and save the image inside assets folder as  `sudoku-[current time].png`
 
 ## Future Improvements
 Future improvements to this program could include adding additional features to the GUI, such as the ability to load puzzles from a file or save solved puzzles to a file. Additionally, the program could be optimized to solve puzzles more quickly, or to solve puzzles with multiple solutions.
