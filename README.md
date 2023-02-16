@@ -39,9 +39,3 @@ To take a screenshot of the current puzzle, click the "Screenshot" button. The p
 
 ## Future Improvements
 Future improvements to this program could include adding additional features to the GUI, such as the ability to load puzzles from a file or save solved puzzles to a file. Additionally, the program could be optimized to solve puzzles more quickly, or to solve puzzles with multiple solutions.
-
-## Created By:
-- lorem ipsum
-- lorem ipsum
-- lorem ipsum
-- lorem ipsum
