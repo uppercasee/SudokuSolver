@@ -6,7 +6,7 @@ from generator import _gen
 import time
 from PIL import ImageGrab
 
-# test
+
 class SudokuSolver:
     def __init__(self, master):
         self.master = master
