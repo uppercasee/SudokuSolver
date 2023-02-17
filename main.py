@@ -6,7 +6,7 @@ from generator import _gen
 import time
 from PIL import ImageGrab
 
-#good job guys
+
 class SudokuSolver:
     def __init__(self, master):
         self.master = master
@@ -65,8 +65,9 @@ class SudokuSolver:
         # Highlight the 3x3 subgrid
         for i in range(3):
             for j in range(3):
-                self.grid[(row // 3) * 3 + i][(col // 3) * 3 +
-                                              j].config(bg=self.grid_affected_color)
+                self.grid[(row // 3) * 3 + i][(col // 3) * 3 + j].config(
+                    bg=self.grid_affected_color
+                )
 
         # unhighlight after focus is lost
         event.widget.bind(
@@ -103,8 +104,9 @@ class SudokuSolver:
         # unhighlight the 3x3 subgrid
         for i in range(3):
             for j in range(3):
-                self.grid[(row // 3) * 3 + i][(col // 3) * 3 +
-                                              j].config(bg=self.grid_unaffected_color)
+                self.grid[(row // 3) * 3 + i][(col // 3) * 3 + j].config(
+                    bg=self.grid_unaffected_color
+                )
 
     def _clickable_buttons(self):
         self.buttons_can_be_clicked = True
@@ -150,24 +152,26 @@ class SudokuSolver:
         self.menu.add_cascade(label="File", menu=self.file_menu)
         # Difficulty dropdown menu
         self.difficulty_menu = tk.Menu(self.file_menu, tearoff=0)
-        self.file_menu.add_cascade(
-            label="Difficulty", menu=self.difficulty_menu)
+        self.file_menu.add_cascade(label="Difficulty", menu=self.difficulty_menu)
         self.difficulty_menu.add_command(
-            label="Easy (1)", command=lambda: self._toggle_difficulty("Easy"))
+            label="Easy (1)", command=lambda: self._toggle_difficulty("Easy")
+        )
         self.difficulty_menu.add_command(
-            label="Medium (2)", command=lambda: self._toggle_difficulty("Medium"))
+            label="Medium (2)", command=lambda: self._toggle_difficulty("Medium")
+        )
         self.difficulty_menu.add_command(
-            label="Hard (3)", command=lambda: self._toggle_difficulty("Hard"))
+            label="Hard (3)", command=lambda: self._toggle_difficulty("Hard")
+        )
         self.file_menu.add_command(label="Save(S)", command=self.save)
-        self.file_menu.add_command(
-            label="Exit(E)", command=self.master.destroy)
+        self.file_menu.add_command(label="Exit(E)", command=self.master.destroy)
 
         # Puzzle menu
         self.puzzle_menu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="Puzzle", menu=self.puzzle_menu)
         self.puzzle_menu.add_command(label="Solve(S)", command=self.solve)
         self.puzzle_menu.add_command(
-            label="Generate(G)", command=lambda: self.generate("Easy"))
+            label="Generate(G)", command=lambda: self.generate("Easy")
+        )
         self.puzzle_menu.add_command(label="Clear(C)", command=self.clear)
 
         # Create a help menu
@@ -190,13 +194,18 @@ class SudokuSolver:
             "    - lorem ipsum\n"
             "    - lorem ipsum\n"
             "    - lorem ipsum\n"
-            "    - lorem ipsum\n"
+            "    - lorem ipsum\n",
         )
 
     def _buttons(self):
         # Create "Solve" button
         self.solve_button = tk.Button(
-            self.master, text="Solve", command=self.solve, bg="green", fg="white", width=13
+            self.master,
+            text="Solve",
+            command=self.solve,
+            bg="green",
+            fg="white",
+            width=13,
         )
         self.solve_button.grid(row=9, column=0, columnspan=2)
 
@@ -207,13 +216,18 @@ class SudokuSolver:
             command=lambda: self.generate(self.difficulty),
             bg="purple",
             fg="white",
-            width=13
+            width=13,
         )
         self.generate_button.grid(row=9, column=2, columnspan=2)
 
         # create dofficulty button with background color light green
         self.difficulty_button = tk.Menubutton(
-            self.master, text="Difficulty", relief=tk.RAISED, bg="yellow", fg="black", width=15
+            self.master,
+            text="Difficulty",
+            relief=tk.RAISED,
+            bg="yellow",
+            fg="black",
+            width=15,
         )
         self.difficulty_button.grid(row=9, column=5, columnspan=2)
         self.difficulty_menu = tk.Menu(self.difficulty_button, tearoff=0)
@@ -231,46 +245,81 @@ class SudokuSolver:
 
         # create clear button with background color RED
         self.clear_button = tk.Button(
-            self.master, text="Clear", command=self.clear, bg="#F44336", fg="white", width=12
+            self.master,
+            text="Clear",
+            command=self.clear,
+            bg="#F44336",
+            fg="white",
+            width=12,
         )
         self.clear_button.grid(row=9, column=7, columnspan=2)
 
     def _bindings(self):
         # Type ESC to unfocus the currently focused cell
-        self.master.bind("<Escape>", lambda event: self.master.focus()
-                         if self.buttons_can_be_clicked else None)
+        self.master.bind(
+            "<Escape>",
+            lambda event: self.master.focus() if self.buttons_can_be_clicked else None,
+        )
 
         # type to change difficulty level
-        self.master.bind("1", lambda event: self._toggle_difficulty(
-            "Easy") if self.buttons_can_be_clicked else None)
-        self.master.bind("2", lambda event: self._toggle_difficulty(
-            "Medium") if self.buttons_can_be_clicked else None)
-        self.master.bind("3", lambda event: self._toggle_difficulty(
-            "Hard") if self.buttons_can_be_clicked else None)
+        self.master.bind(
+            "1",
+            lambda event: self._toggle_difficulty("Easy")
+            if self.buttons_can_be_clicked
+            else None,
+        )
+        self.master.bind(
+            "2",
+            lambda event: self._toggle_difficulty("Medium")
+            if self.buttons_can_be_clicked
+            else None,
+        )
+        self.master.bind(
+            "3",
+            lambda event: self._toggle_difficulty("Hard")
+            if self.buttons_can_be_clicked
+            else None,
+        )
 
         # Type S to solve the puzzle
-        self.master.bind("s", lambda event: self.solve()
-                         if self.buttons_can_be_clicked else None)
-        self.master.bind("S", lambda event: self.solve()
-                         if self.buttons_can_be_clicked else None)
+        self.master.bind(
+            "s", lambda event: self.solve() if self.buttons_can_be_clicked else None
+        )
+        self.master.bind(
+            "S", lambda event: self.solve() if self.buttons_can_be_clicked else None
+        )
 
         # Type CTRL + S to save the puzzle
-        self.master.bind("<Control-s>", lambda event: self.save()
-                            if self.buttons_can_be_clicked else None)
-        self.master.bind("<Control-S>", lambda event: self.save()
-                            if self.buttons_can_be_clicked else None)
+        self.master.bind(
+            "<Control-s>",
+            lambda event: self.save() if self.buttons_can_be_clicked else None,
+        )
+        self.master.bind(
+            "<Control-S>",
+            lambda event: self.save() if self.buttons_can_be_clicked else None,
+        )
 
         # Type G to generate a puzzle
-        self.master.bind("g", lambda event: self.generate(
-            self.difficulty) if self.buttons_can_be_clicked else None)
-        self.master.bind("G", lambda event: self.generate(
-            self.difficulty) if self.buttons_can_be_clicked else None)
+        self.master.bind(
+            "g",
+            lambda event: self.generate(self.difficulty)
+            if self.buttons_can_be_clicked
+            else None,
+        )
+        self.master.bind(
+            "G",
+            lambda event: self.generate(self.difficulty)
+            if self.buttons_can_be_clicked
+            else None,
+        )
 
         # Type C to clear the puzzle
-        self.master.bind("c", lambda event: self.clear()
-                         if self.buttons_can_be_clicked else None)
-        self.master.bind("C", lambda event: self.clear()
-                         if self.buttons_can_be_clicked else None)
+        self.master.bind(
+            "c", lambda event: self.clear() if self.buttons_can_be_clicked else None
+        )
+        self.master.bind(
+            "C", lambda event: self.clear() if self.buttons_can_be_clicked else None
+        )
 
         # Type E to exit the program
         self.master.bind("e", lambda event: self.master.destroy())
@@ -362,7 +411,8 @@ class SudokuSolver:
         time.sleep(0.5)
         # save the image as ./assets/sudoku-[current time].png
         ImageGrab.grab().crop((x, y, x1, y1)).save(
-            "./assets/sudoku-" + str(time.time()) + ".png")
+            "./assets/sudoku-" + str(time.time()) + ".png"
+        )
 
     def clear(self):
         for i in range(9):
